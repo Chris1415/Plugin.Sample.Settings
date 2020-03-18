@@ -1,0 +1,11 @@
+bin/
+obj/
+.vs
+*.dll
+*.user
+packages/
+project.lock.json
+*.bat
+*.log
+*.txt
+*.dev.json
