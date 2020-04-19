@@ -1,6 +1,6 @@
-﻿using Plugin.Sample.Settings.Attributes;
+﻿using Microsoft.Extensions.Logging;
+using Plugin.Sample.Settings.Attributes;
 using Plugin.Sample.Settings.Commands;
-using Microsoft.Extensions.Logging;
 using Sitecore.Commerce.Core;
 using Sitecore.Commerce.EntityViews;
 using Sitecore.Framework.Pipelines;

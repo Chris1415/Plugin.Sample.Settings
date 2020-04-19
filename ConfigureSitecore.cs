@@ -1,8 +1,9 @@
 ﻿namespace Plugin.Sample.Settings
 {
     using System.Reflection;
-    using Plugin.Sample.Settings.EntityViews;
     using Microsoft.Extensions.DependencyInjection;
+    using Plugin.Sample.Settings.EntityViews;
+    using Plugin.Sample.Settings.EntityViews.Generic;
     using Sitecore.Commerce.Core;
     using Sitecore.Commerce.EntityViews;
     using Sitecore.Commerce.Plugin.BusinessUsers;
@@ -14,6 +15,12 @@
     /// </summary>
     public class ConfigureSitecore : IConfigureSitecore
     {
+        /// <summary>
+        /// The configure services.
+        /// </summary>
+        /// <param name="services">
+        /// The services.
+        /// </param>
         public void ConfigureServices(IServiceCollection services)
         {
             var assembly = Assembly.GetExecutingAssembly();
@@ -41,6 +48,19 @@
                    c.Add<DoActionDeactivateSetting>().After<ValidateEntityVersionBlock>();
                    c.Add<DoActionAddSetting>().After<ValidateEntityVersionBlock>();
                    c.Add<DoActionDeleteSetting>().After<ValidateEntityVersionBlock>();
+               })
+                .ConfigurePipeline<IFormatEntityViewPipeline>(d =>
+                {
+                    d.Add<EnsureActionsGeneric>().After<PopulateEntityViewActionsBlock>();
+                })
+               .ConfigurePipeline<IGetEntityViewPipeline>(d =>
+               {
+                   d.Add<EntityViewSettingsGenericBlock>().Before<IFormatEntityViewPipeline>();
+                   d.Add<FormEditSettingGenericBlock>().Before<IFormatEntityViewPipeline>();
+               })
+               .ConfigurePipeline<IDoActionPipeline>(c =>
+               {
+                   c.Add<DoActionSettingGenericBlock>().After<ValidateEntityVersionBlock>();
                })
                .ConfigurePipeline<IConfigureServiceApiPipeline>(configure => configure.Add<ConfigureServiceApiBlock>()));
 
